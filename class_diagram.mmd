@@ -1,0 +1,199 @@
+classDiagram
+    class Node {
+        +data: Any
+        +next: Node
+        +__init__(data)
+    }
+
+    class LinkedList {
+        +head: Node
+        +tail: Node
+        +size: int
+        +__init__()
+        +append(data)
+        +is_empty() bool
+        +clear()
+        +find(condition) Any
+        +count_if(condition) int
+        +remove(condition) bool
+    }
+    LinkedList *-- Node
+
+    class TextParser {
+        +get_field(text, index)$ str
+    }
+
+    class ClassRoom {
+        +class_id: str
+        +class_name: str
+        +__init__(class_id, class_name)
+        +to_file_line() str
+    }
+
+    class Student {
+        +class_id: str
+        +student_id: str
+        +full_name: str
+        +__init__(class_id, student_id, full_name)
+        +to_file_line() str
+    }
+
+    class Schedule {
+        +class_id: str
+        +weekday: str
+        +period: str
+        +room: str
+        +__init__(class_id, weekday, period, room)
+        +to_file_line() str
+    }
+
+    class AttendanceRecord {
+        +class_id: str
+        +date: str
+        +student_id: str
+        +status: str
+        +__init__(class_id, date, student_id, status)
+        +to_file_line() str
+    }
+
+    class AbsenceReportItem {
+        +student: Student
+        +total_sessions: int
+        +absence_count: int
+        +absence_rate: float
+        +__init__(student, total_sessions, absence_count, absence_rate)
+    }
+    AbsenceReportItem o-- Student
+
+    class FileStorage {
+        +data_folder: str
+        +classes_file: str
+        +students_file: str
+        +schedules_file: str
+        +attendance_file: str
+        +__init__(data_folder)
+        +ensure_files()
+        +create_file_if_missing(file_path)
+        +load_all(classes, students, schedules, attendance_records)
+        +load_classes(classes)
+        +load_students(students)
+        +load_schedules(schedules)
+        +load_attendance(attendance_records)
+        +save_all(classes, students, schedules, attendance_records)
+        +save_classes(classes)
+        +save_students(students)
+        +save_schedules(schedules)
+        +save_attendance(attendance_records)
+    }
+
+    class ClassManager {
+        +classes: LinkedList
+        +__init__(classes)
+        +class_exists(class_id) bool
+        +find_class(class_id) ClassRoom
+        +add_class(class_id, class_name) bool
+        +input_add_class() bool
+        +display_all()
+        +input_find_class()
+    }
+    ClassManager o-- LinkedList
+
+    class StudentManager {
+        +students: LinkedList
+        +class_manager: ClassManager
+        +__init__(students, class_manager)
+        +student_exists_in_class(class_id, student_id) bool
+        +find_student_in_class(class_id, student_id) Student
+        +add_student(class_id, student_id, full_name) bool
+        +input_add_student() bool
+        +display_students_by_class(class_id)
+        +input_display_students_by_class()
+        +input_find_student_by_id()
+        +count_students_by_class(class_id) int
+    }
+    StudentManager o-- LinkedList
+    StudentManager o-- ClassManager
+
+    class ScheduleManager {
+        +schedules: LinkedList
+        +class_manager: ClassManager
+        +__init__(schedules, class_manager)
+        +add_schedule(class_id, weekday, period, room) bool
+        +input_add_schedule() bool
+        +display_schedule_by_class(class_id)
+        +input_display_schedule_by_class()
+    }
+    ScheduleManager o-- LinkedList
+    ScheduleManager o-- ClassManager
+
+    class AttendanceManager {
+        +attendance_records: LinkedList
+        +class_manager: ClassManager
+        +student_manager: StudentManager
+        +__init__(attendance_records, class_manager, student_manager)
+        +has_record(class_id, date, student_id) bool
+        +add_record(class_id, date, student_id, status) bool
+        +input_attend_class_by_date() bool
+        +input_status_for_student(student) str
+        +input_add_single_record() bool
+        +display_records_by_class_date(class_id, date)
+        +input_display_records_by_class_date()
+        +input_search_records_by_student_id()
+        +count_total_sessions(class_id, student_id) int
+        +count_absences(class_id, student_id) int
+        +calculate_absence_rate(class_id, student_id) float
+    }
+    AttendanceManager o-- LinkedList
+    AttendanceManager o-- ClassManager
+    AttendanceManager o-- StudentManager
+
+    class ReportManager {
+        +students: LinkedList
+        +attendance_records: LinkedList
+        +student_manager: StudentManager
+        +attendance_manager: AttendanceManager
+        +class_manager: ClassManager
+        +__init__(students, attendance_records, student_manager, attendance_manager, class_manager)
+        +input_session_statistics()
+        +display_session_statistics(class_id, date)
+        +input_most_absent_students()
+        +display_most_absent_students(class_id)
+        +input_warning_students()
+        +display_warning_students(class_id)
+        +build_absence_report_items(class_id) LinkedList
+        +sort_report_items_by_absence_desc(report_items)
+    }
+    ReportManager o-- LinkedList
+    ReportManager o-- StudentManager
+    ReportManager o-- AttendanceManager
+    ReportManager o-- ClassManager
+
+    class AttendanceApp {
+        +classes: LinkedList
+        +students: LinkedList
+        +schedules: LinkedList
+        +attendance_records: LinkedList
+        +storage: FileStorage
+        +class_manager: ClassManager
+        +student_manager: StudentManager
+        +schedule_manager: ScheduleManager
+        +attendance_manager: AttendanceManager
+        +report_manager: ReportManager
+        +__init__()
+        +save_data()
+        +run()
+        +print_main_menu()
+        +class_menu()
+        +student_menu()
+        +schedule_menu()
+        +attendance_menu()
+        +search_menu()
+        +report_menu()
+    }
+    AttendanceApp *-- LinkedList
+    AttendanceApp *-- FileStorage
+    AttendanceApp *-- ClassManager
+    AttendanceApp *-- StudentManager
+    AttendanceApp *-- ScheduleManager
+    AttendanceApp *-- AttendanceManager
+    AttendanceApp *-- ReportManager
