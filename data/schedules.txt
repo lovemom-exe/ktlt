@@ -1,0 +1,3 @@
+IT001|Thu 2|Tiet 1-3|D9-101
+IT001|Thu 5|Tiet 4-6|D9-203
+IT002|Thu 3|Tiet 7-9|TC-305
