@@ -372,6 +372,36 @@ class AttendanceManager:
         absence_count = self.count_absences(class_id, student_id)
         return absence_count * 100.0 / total_sessions
 
+    def get_sessions_by_class(self, class_id):
+        """Tra ve LinkedList cac ngay da diem danh cua 1 lop, khong trung lap."""
+        sessions = LinkedList()
+        current = self.attendance_records.head
+        while current is not None:
+            record = current.data
+            if record.class_id == class_id:
+                already_added = sessions.find(lambda d: d == record.date)
+                if already_added is None:
+                    sessions.append(record.date)
+            current = current.next
+        return sessions
+
+    def input_display_sessions_by_class(self):
+        print("\n=== Danh sach buoi da diem danh ===")
+        class_id = input("Ma lop: ").strip()
+        if not self.class_manager.class_exists(class_id):
+            print("Ma lop khong ton tai.")
+            return
+        sessions = self.get_sessions_by_class(class_id)
+        if sessions.is_empty():
+            print("Lop nay chua co buoi diem danh nao.")
+            return
+        current = sessions.head
+        index = 1
+        while current is not None:
+            print(str(index) + ". " + current.data)
+            index += 1
+            current = current.next
+
 
 class ReportManager:
     def __init__(self, students, attendance_records, student_manager, attendance_manager, class_manager):

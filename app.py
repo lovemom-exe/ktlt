@@ -127,6 +127,7 @@ class AttendanceApp:
             print("1. Diem danh lop theo ngay")
             print("2. Them mot ban ghi diem danh")
             print("3. Xem diem danh cua lop theo ngay")
+            print("4. Xem danh sach buoi da diem danh")
             print("0. Quay lai")
             choice = input("Chon chuc nang: ").strip()
             if choice == "1":
@@ -138,6 +139,8 @@ class AttendanceApp:
                     print("Da them ban ghi diem danh.")
             elif choice == "3":
                 self.attendance_manager.input_display_records_by_class_date()
+            elif choice == "4":
+                self.attendance_manager.input_display_sessions_by_class()
             elif choice == "0":
                 break
             else:

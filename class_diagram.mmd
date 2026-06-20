@@ -142,6 +142,8 @@ classDiagram
         +count_total_sessions(class_id, student_id) int
         +count_absences(class_id, student_id) int
         +calculate_absence_rate(class_id, student_id) float
+        +get_sessions_by_class(class_id) LinkedList
+        +input_display_sessions_by_class()
     }
     AttendanceManager o-- LinkedList
     AttendanceManager o-- ClassManager
